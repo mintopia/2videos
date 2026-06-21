@@ -19,20 +19,34 @@ npm run preview    # serve the built bundle
 The build is plain static files. Drop `dist/` on any static host. No server, no
 API keys.
 
-## Deploy (Cloudflare Pages)
+## Deploy (Cloudflare)
 
-Connect this repo in the Cloudflare Pages dashboard ("Connect to Git") and use:
+The app is served as a static-assets Worker. `wrangler.jsonc` points Cloudflare
+at the `dist/` build output, so no server code runs.
+
+When you connect this repo in Cloudflare ("Import a repository" / Workers
+Builds), set:
 
 | Setting | Value |
 | --- | --- |
-| Framework preset | Vite |
 | Build command | `npm run build` |
-| Build output directory | `dist` |
+| Deploy command | `npx wrangler deploy` |
 | Production branch | `main` |
 
 Node version is pinned via `.nvmrc` (20). No environment variables or secrets
 are required. Pushing to `main` triggers a production deploy; pull requests get
 preview deployments automatically.
+
+Deploy from your machine instead:
+
+```bash
+npx wrangler login
+npm run deploy        # runs: wrangler deploy (builds dist first via `npm run build`)
+```
+
+> Using the classic **Pages** UI instead of Workers Builds? There's no deploy
+> command there: set build command `npm run build` and output directory `dist`.
+> Or push a one-off from the CLI with `npx wrangler pages deploy dist`.
 
 ## How it works
 
