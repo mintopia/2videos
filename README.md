@@ -30,7 +30,7 @@ Connect this repo in the Cloudflare Pages dashboard ("Connect to Git") and use:
 | Build output directory | `dist` |
 | Production branch | `main` |
 
-Node version is pinned via `.nvmrc` (22). No environment variables or secrets
+Node version is pinned via `.nvmrc` (24, current LTS). No environment variables or secrets
 are required. Pushing to `main` triggers a production deploy; pull requests get
 preview deployments automatically.
 
