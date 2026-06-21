@@ -33,7 +33,7 @@ Builds), set:
 | Deploy command | `npx wrangler deploy` |
 | Production branch | `main` |
 
-Node version is pinned via `.nvmrc` (20). No environment variables or secrets
+Node version is pinned via `.nvmrc` (22). No environment variables or secrets
 are required. Pushing to `main` triggers a production deploy; pull requests get
 preview deployments automatically.
 
