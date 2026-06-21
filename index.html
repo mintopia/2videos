@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Two videos and a motherfucking slider</title>
+    <meta
+      name="description"
+      content="Two YouTube videos, one crossfader. Blend the audio in real time. No account, no upload, desktop only."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@600;800;900&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="dir-b">
+    <!-- Desktop-only: below the minimum viewport, block rather than break. -->
+    <div class="too-small" role="alert">
+      <p class="too-small-big">Too small.</p>
+      <p class="too-small-sub">
+        This thing needs a real computer with a real window. Volume control is
+        desktop-only, and the fader wants room. Come back wider (720px+).
+      </p>
+    </div>
+
+    <main class="app">
+      <header class="masthead">
+        <p class="kicker">no account · no upload · works on a real computer</p>
+        <h1 class="wordmark">
+          Two videos<br />and a <span class="hot">motherfucking</span> slider
+        </h1>
+      </header>
+
+      <section class="decks" aria-label="Decks">
+        <!-- LEFT DECK -->
+        <article class="deck" data-side="left" data-state="empty">
+          <div class="deck-tag">
+            <span class="side"><span class="dot" aria-hidden="true"></span> Left deck</span>
+            <span class="status" data-role="status">Empty</span>
+          </div>
+          <div class="screen">
+            <div class="player" id="player-left"></div>
+            <div class="screen-msg screen-empty" data-role="empty">
+              <span class="screen-arrow" aria-hidden="true">↓</span> paste a link
+            </div>
+            <p class="screen-msg screen-error" data-role="error" hidden></p>
+            <button class="screen-msg screen-blocked" type="button" data-role="blocked" hidden>
+              ▶ Click to start
+            </button>
+          </div>
+          <form class="deck-row" data-role="form">
+            <input
+              class="url"
+              type="text"
+              inputmode="url"
+              autocomplete="off"
+              spellcheck="false"
+              data-role="url"
+              placeholder="youtube.com/watch?v=…"
+              aria-label="Left deck video URL or ID"
+            />
+            <button class="btn" type="submit">Cue</button>
+          </form>
+          <div class="deck-actions">
+            <button class="btn play" type="button" data-role="play" disabled>▶ Play</button>
+            <details class="recents" data-role="recents" hidden>
+              <summary>Recent</summary>
+              <ul class="recents-list" data-role="recents-list"></ul>
+            </details>
+          </div>
+        </article>
+
+        <!-- RIGHT DECK -->
+        <article class="deck" data-side="right" data-state="empty">
+          <div class="deck-tag">
+            <span class="side"><span class="dot" aria-hidden="true"></span> Right deck</span>
+            <span class="status" data-role="status">Empty</span>
+          </div>
+          <div class="screen">
+            <div class="player" id="player-right"></div>
+            <div class="screen-msg screen-empty" data-role="empty">
+              <span class="screen-arrow" aria-hidden="true">↓</span> paste a link
+            </div>
+            <p class="screen-msg screen-error" data-role="error" hidden></p>
+            <button class="screen-msg screen-blocked" type="button" data-role="blocked" hidden>
+              ▶ Click to start
+            </button>
+          </div>
+          <form class="deck-row" data-role="form">
+            <input
+              class="url"
+              type="text"
+              inputmode="url"
+              autocomplete="off"
+              spellcheck="false"
+              data-role="url"
+              placeholder="youtube.com/watch?v=…"
+              aria-label="Right deck video URL or ID"
+            />
+            <button class="btn" type="submit">Cue</button>
+          </form>
+          <div class="deck-actions">
+            <button class="btn play" type="button" data-role="play" disabled>▶ Play</button>
+            <details class="recents" data-role="recents" hidden>
+              <summary>Recent</summary>
+              <ul class="recents-list" data-role="recents-list"></ul>
+            </details>
+          </div>
+        </article>
+      </section>
+
+      <!-- THE HERO -->
+      <section class="console" aria-label="Crossfader">
+        <div class="console-top">
+          <span class="console-label">Crossfader — equal power</span>
+          <span class="gains" aria-hidden="true">
+            <span class="gv lv">L <span data-role="gain-left">71%</span></span>
+            <span class="gv-sep">/</span>
+            <span class="gv rv">R <span data-role="gain-right">71%</span></span>
+          </span>
+        </div>
+        <div class="fader-shell">
+          <span class="end l" aria-hidden="true">L</span>
+          <input
+            class="fader"
+            id="fader"
+            type="range"
+            min="0"
+            max="1000"
+            value="500"
+            aria-label="Crossfader: drag left for the left deck, right for the right deck"
+          />
+          <span class="end r" aria-hidden="true">R</span>
+        </div>
+        <div class="master">
+          <button class="btn master-btn" type="button" id="master">▶ Play both</button>
+          <button class="btn ghost" type="button" id="copy">Copy mix link</button>
+          <output class="copy-msg" id="copy-msg" hidden></output>
+          <p class="note">
+            No iPhone. Apple won't let a webpage touch the volume. Bring a laptop.
+          </p>
+        </div>
+        <input class="copy-fallback" id="copy-fallback" type="text" readonly hidden aria-label="Mix link, copy it yourself" />
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,258 @@
+<!doctype html>
+<!--
+  THROWAWAY DESIGN PROBE — not the product.
+  Compares two color strategies for the crossfader app:
+    A) Committed: near-black canvas + ONE scream color
+    B) Full palette: left deck vs right deck color-blocked, blend at the fader
+  Toggle at top-left. Open in a desktop browser. Delete after deciding.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Color probe — two videos and a slider</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@600;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    /* shared dark "blacked-out booth" canvas — tinted toward warm, never pure #000 */
+    --ink:        oklch(0.16 0.012 60);   /* near-black, warm-tinted */
+    --ink-2:      oklch(0.21 0.014 60);   /* raised surface */
+    --ink-3:      oklch(0.27 0.016 60);   /* hairlines / wells */
+    --paper:      oklch(0.93 0.015 80);   /* off-white ink, never #fff */
+    --paper-dim:  oklch(0.72 0.012 80);
+    --grain:      0.05;
+    --ease: cubic-bezier(0.22, 1, 0.36, 1); /* ease-out-quint */
+  }
+
+  /* ---- Strategy A: committed, one scream ---- */
+  body.dir-a {
+    --scream:     oklch(0.68 0.23 35);    /* riso orange-red */
+    --scream-ink: oklch(0.18 0.04 35);
+    --left-accent:  var(--scream);
+    --right-accent: var(--scream);
+    --fader-fill:   var(--scream);
+  }
+  /* ---- Strategy B: full palette, left vs right ---- */
+  body.dir-b {
+    --left-accent:  oklch(0.70 0.16 230);  /* riso cyan-blue */
+    --right-accent: oklch(0.69 0.21 30);   /* riso red */
+    --scream:       var(--right-accent);
+    --scream-ink:   oklch(0.18 0.04 30);
+    --fader-fill:   linear-gradient(90deg, var(--left-accent), var(--right-accent));
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Archivo', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100%;
+    position: relative;
+  }
+  /* riso grain over everything */
+  body::after {
+    content: "";
+    position: fixed; inset: 0; pointer-events: none; z-index: 999;
+    opacity: var(--grain);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  .toggle {
+    position: fixed; top: 16px; left: 16px; z-index: 1000;
+    display: flex; gap: 0; border: 2px solid var(--paper);
+    font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.04em;
+  }
+  .toggle button {
+    appearance: none; border: 0; cursor: pointer;
+    padding: 8px 12px; background: transparent; color: var(--paper);
+    font: inherit; text-transform: uppercase;
+  }
+  .toggle button[aria-pressed="true"] { background: var(--scream); color: var(--scream-ink); font-weight: 700; }
+
+  .wrap { max-width: 1200px; margin: 0 auto; padding: 80px 32px 64px; }
+
+  header.masthead { margin-bottom: 40px; }
+  .kicker {
+    font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.22em;
+    text-transform: uppercase; color: var(--paper-dim); margin: 0 0 10px;
+  }
+  h1 {
+    font-family: 'Anton', 'Archivo', sans-serif; font-weight: 400;
+    font-size: clamp(40px, 7vw, 96px); line-height: 0.92; letter-spacing: 0.005em;
+    text-transform: uppercase; margin: 0; color: var(--paper);
+  }
+  h1 .hot { color: var(--scream); }
+
+  /* decks */
+  .decks { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; align-items: start; }
+  .deck { border: 2px solid var(--ink-3); background: var(--ink-2); padding: 14px; }
+  body.dir-b .deck.left  { border-color: var(--left-accent); }
+  body.dir-b .deck.right { border-color: var(--right-accent); }
+  body.dir-a .deck { border-color: var(--ink-3); }
+
+  .deck-tag {
+    display: flex; align-items: center; justify-content: space-between;
+    font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--paper-dim); margin-bottom: 10px;
+  }
+  .deck.left  .deck-tag .dot { background: var(--left-accent); }
+  .deck.right .deck-tag .dot { background: var(--right-accent); }
+  .dot { width: 10px; height: 10px; display: inline-block; border-radius: 2px; margin-right: 8px; }
+  .deck-tag .side { display: flex; align-items: center; }
+
+  .screen {
+    aspect-ratio: 16 / 9; background:
+      repeating-linear-gradient(45deg, var(--ink-3) 0 2px, transparent 2px 14px), var(--ink);
+    display: grid; place-items: center; color: var(--paper-dim);
+    font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.08em;
+  }
+  .deck.left.loaded  .screen { background: var(--left-accent); color: var(--scream-ink); }
+  .deck.right.loaded .screen { background: var(--right-accent); color: var(--scream-ink); }
+
+  .deck-row { display: flex; gap: 8px; margin-top: 12px; }
+  .url {
+    flex: 1; background: var(--ink); border: 2px solid var(--ink-3); color: var(--paper);
+    font-family: 'Space Mono', monospace; font-size: 13px; padding: 10px 12px;
+  }
+  .url::placeholder { color: var(--paper-dim); }
+  .url:focus { outline: 2px solid var(--scream); outline-offset: 1px; }
+  .btn {
+    appearance: none; cursor: pointer; border: 2px solid var(--paper);
+    background: var(--paper); color: var(--ink); font-family: 'Space Mono', monospace;
+    font-weight: 700; font-size: 13px; text-transform: uppercase; padding: 10px 16px;
+    transition: transform 0.12s var(--ease);
+  }
+  .btn:active { transform: translateY(1px); }
+  .btn.ghost { background: transparent; color: var(--paper); }
+
+  /* THE HERO: crossfader */
+  .console { margin-top: 36px; border: 2px solid var(--ink-3); background: var(--ink-2); padding: 28px 32px 34px; }
+  .console-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 22px; }
+  .console-top .label {
+    font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--paper-dim);
+  }
+  .gains { font-family: 'Space Mono', monospace; font-size: 13px; color: var(--paper); }
+  .gains b { color: var(--scream); }
+  body.dir-b .gains .lv { color: var(--left-accent); }
+  body.dir-b .gains .rv { color: var(--right-accent); }
+
+  .fader-shell { display: flex; align-items: center; gap: 18px; }
+  .end {
+    font-family: 'Anton', sans-serif; font-size: clamp(20px, 3vw, 34px);
+    text-transform: uppercase; color: var(--paper-dim); width: 64px;
+  }
+  .end.l { text-align: right; }
+  body.dir-b .end.l { color: var(--left-accent); }
+  body.dir-b .end.r { color: var(--right-accent); }
+
+  .fader { flex: 1; position: relative; }
+  input[type="range"] {
+    appearance: none; width: 100%; height: 26px; background: transparent; cursor: grab; margin: 0;
+  }
+  input[type="range"]:active { cursor: grabbing; }
+  input[type="range"]::-webkit-slider-runnable-track {
+    height: 14px; border: 2px solid var(--ink); background: var(--fader-fill);
+  }
+  input[type="range"]::-moz-range-track {
+    height: 14px; border: 2px solid var(--ink); background: var(--fader-fill);
+  }
+  input[type="range"]::-webkit-slider-thumb {
+    appearance: none; width: 26px; height: 46px; margin-top: -18px;
+    background: var(--paper); border: 3px solid var(--ink);
+    box-shadow: 0 0 0 2px var(--paper);
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 22px; height: 44px; background: var(--paper); border: 3px solid var(--ink);
+  }
+  input[type="range"]:focus-visible { outline: none; }
+  input[type="range"]:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 2px var(--scream); }
+
+  .master { display: flex; gap: 12px; margin-top: 24px; align-items: center; }
+  .master .note {
+    margin-left: auto; font-family: 'Space Mono', monospace; font-size: 11px;
+    letter-spacing: 0.04em; color: var(--paper-dim); max-width: 360px; text-align: right;
+  }
+  .caption {
+    margin: 26px 4px 0; font-family: 'Space Mono', monospace; font-size: 12px;
+    color: var(--paper-dim); line-height: 1.5;
+  }
+  .caption b { color: var(--scream); }
+</style>
+</head>
+<body class="dir-a">
+  <div class="toggle" role="group" aria-label="Color strategy">
+    <button id="ta" aria-pressed="true">A · one scream</button>
+    <button id="tb" aria-pressed="false">B · full palette</button>
+  </div>
+
+  <div class="wrap">
+    <header class="masthead">
+      <p class="kicker">no account · no upload · works on a real computer</p>
+      <h1>Two videos<br>and a <span class="hot">motherfucking</span> slider</h1>
+    </header>
+
+    <section class="decks">
+      <div class="deck left loaded">
+        <div class="deck-tag"><span class="side"><span class="dot"></span>Left deck</span><span>A</span></div>
+        <div class="screen">▶ now playing</div>
+        <div class="deck-row">
+          <input class="url" value="youtu.be/dQw4w9WgXcQ" aria-label="Left deck URL" />
+          <button class="btn">Play</button>
+        </div>
+      </div>
+      <div class="deck right">
+        <div class="deck-tag"><span class="side"><span class="dot"></span>Right deck</span><span>B</span></div>
+        <div class="screen">paste a youtube link</div>
+        <div class="deck-row">
+          <input class="url" placeholder="youtube.com/watch?v=…" aria-label="Right deck URL" />
+          <button class="btn">Cue</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="console" aria-label="Crossfader">
+      <div class="console-top">
+        <span class="label">Crossfader · equal power</span>
+        <span class="gains"><span class="lv">L <b id="lg">71%</b></span> &nbsp;·&nbsp; <span class="rv">R <b id="rg">71%</b></span></span>
+      </div>
+      <div class="fader-shell">
+        <span class="end l">L</span>
+        <div class="fader"><input id="xf" type="range" min="0" max="1000" value="500" aria-label="Crossfader" /></div>
+        <span class="end r">R</span>
+      </div>
+      <div class="master">
+        <button class="btn">▶ Play both</button>
+        <button class="btn ghost">Copy mix link</button>
+        <span class="note">No iPhone. Apple won't let a webpage touch the volume. Bring a laptop.</span>
+      </div>
+    </section>
+
+    <p class="caption">Both probes share the same dark booth canvas and layout. <b>A</b> commits to one scream color doing all the work. <b>B</b> gives each deck its own color so the mix is two colors bleeding together at the fader. Drag the slider; the gains follow the equal-power law.</p>
+  </div>
+
+<script>
+  const body = document.body, ta = document.getElementById('ta'), tb = document.getElementById('tb');
+  function setDir(d){
+    body.classList.toggle('dir-a', d==='a');
+    body.classList.toggle('dir-b', d==='b');
+    ta.setAttribute('aria-pressed', d==='a'); tb.setAttribute('aria-pressed', d==='b');
+  }
+  ta.onclick = () => setDir('a'); tb.onclick = () => setDir('b');
+
+  const xf = document.getElementById('xf'), lg = document.getElementById('lg'), rg = document.getElementById('rg');
+  function update(){
+    const x = xf.value/1000;                 // 0..1
+    const l = Math.cos(x*Math.PI/2), r = Math.sin(x*Math.PI/2);
+    lg.textContent = Math.round(l*100)+'%';
+    rg.textContent = Math.round(r*100)+'%';
+  }
+  xf.addEventListener('input', update); update();
+</script>
+</body>
+</html>

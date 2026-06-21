@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-20",
+  "title": "Design System: Two videos and a motherfucking slider",
+  "extensions": {
+    "colorMeta": {
+      "left-cyan": {
+        "role": "primary",
+        "displayName": "Left Cyan",
+        "canonical": "oklch(0.70 0.16 230)",
+        "tonalRamp": ["oklch(0.15 0.06 230)", "oklch(0.26 0.10 230)", "oklch(0.37 0.13 230)", "oklch(0.48 0.15 230)", "oklch(0.59 0.16 230)", "oklch(0.70 0.16 230)", "oklch(0.82 0.11 230)", "oklch(0.93 0.05 230)"]
+      },
+      "right-red": {
+        "role": "primary",
+        "displayName": "Right Red",
+        "canonical": "oklch(0.69 0.21 30)",
+        "tonalRamp": ["oklch(0.15 0.07 30)", "oklch(0.26 0.12 30)", "oklch(0.37 0.16 30)", "oklch(0.48 0.19 30)", "oklch(0.59 0.21 30)", "oklch(0.69 0.21 30)", "oklch(0.81 0.14 30)", "oklch(0.92 0.06 30)"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink (warm near-black canvas)",
+        "canonical": "oklch(0.16 0.012 60)",
+        "tonalRamp": ["oklch(0.16 0.012 60)", "oklch(0.21 0.014 60)", "oklch(0.27 0.016 60)", "oklch(0.40 0.014 70)", "oklch(0.55 0.012 70)", "oklch(0.72 0.012 80)", "oklch(0.84 0.012 80)", "oklch(0.93 0.015 80)"]
+      },
+      "ink-2": { "role": "neutral", "displayName": "Ink-2 (raised surface)", "canonical": "oklch(0.21 0.014 60)" },
+      "ink-3": { "role": "neutral", "displayName": "Ink-3 (border / well)", "canonical": "oklch(0.27 0.016 60)" },
+      "paper": { "role": "neutral", "displayName": "Paper (off-white ink)", "canonical": "oklch(0.93 0.015 80)" },
+      "paper-dim": { "role": "neutral", "displayName": "Paper-Dim (labels)", "canonical": "oklch(0.72 0.012 80)" }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display (Anton)", "purpose": "Wordmark and the fader L/R labels only. Shout-once." },
+      "headline": { "displayName": "Headline (Archivo 900)", "purpose": "Sparing emphasis where Anton is too loud." },
+      "body": { "displayName": "Body (Archivo 600)", "purpose": "Honest notes and prose. Cap at 65-75ch." },
+      "label": { "displayName": "Label (Space Mono)", "purpose": "Default chrome voice: tags, buttons, inputs, readouts, captions. Uppercase." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-out-quint", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Default easing for every state transition. No bounce, no elastic." },
+      { "name": "press", "value": "120ms", "purpose": "Tactile button/thumb feedback on interaction." },
+      { "name": "state", "value": "240ms", "purpose": "Deck state changes (cued/playing/errored). Suppressed under prefers-reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "min-desktop", "value": "720px", "purpose": "Below this the app shows a blocking 'open me wider' state. Desktop-only." }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Blunt solid action: Play, Cue. Paper fill, hard corners.",
+      "html": "<button class=\"ds-btn-primary\">Play</button>",
+      "css": ".ds-btn-primary { background: oklch(0.93 0.015 80); color: oklch(0.16 0.012 60); font-family: 'Space Mono', ui-monospace, monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; border: 2px solid oklch(0.93 0.015 80); border-radius: 0; padding: 10px 16px; cursor: pointer; transition: transform 120ms cubic-bezier(0.22,1,0.36,1); } .ds-btn-primary:active { transform: translateY(1px); } .ds-btn-primary:focus-visible { outline: 2px solid oklch(0.69 0.21 30); outline-offset: 1px; }"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary action: Copy mix link. Outlined, transparent.",
+      "html": "<button class=\"ds-btn-ghost\">Copy mix link</button>",
+      "css": ".ds-btn-ghost { background: transparent; color: oklch(0.93 0.015 80); font-family: 'Space Mono', ui-monospace, monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; border: 2px solid oklch(0.27 0.016 60); border-radius: 0; padding: 10px 16px; cursor: pointer; transition: transform 120ms cubic-bezier(0.22,1,0.36,1), border-color 120ms; } .ds-btn-ghost:hover { border-color: oklch(0.93 0.015 80); } .ds-btn-ghost:active { transform: translateY(1px); }"
+    },
+    {
+      "name": "URL Input",
+      "kind": "input",
+      "refersTo": "input-url",
+      "description": "Per-deck paste field. Ink well, mono text, red focus.",
+      "html": "<input class=\"ds-input-url\" placeholder=\"youtube.com/watch?v=…\" />",
+      "css": ".ds-input-url { background: oklch(0.16 0.012 60); color: oklch(0.93 0.015 80); font-family: 'Space Mono', ui-monospace, monospace; font-size: 13px; border: 2px solid oklch(0.27 0.016 60); border-radius: 0; padding: 10px 12px; } .ds-input-url::placeholder { color: oklch(0.72 0.012 80); } .ds-input-url:focus { outline: 2px solid oklch(0.69 0.21 30); outline-offset: 1px; }"
+    },
+    {
+      "name": "Deck Frame (Left)",
+      "kind": "card",
+      "refersTo": null,
+      "description": "A deck body, framed in its own ink. Left is cyan, right would swap to red.",
+      "html": "<div class=\"ds-deck\"><div class=\"ds-deck-tag\"><span><span class=\"ds-dot\"></span>Left deck</span><span>A</span></div><div class=\"ds-screen\">paste a youtube link</div></div>",
+      "css": ".ds-deck { background: oklch(0.21 0.014 60); border: 2px solid oklch(0.70 0.16 230); border-radius: 0; padding: 14px; } .ds-deck-tag { display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; color: oklch(0.72 0.012 80); margin-bottom: 10px; } .ds-dot { display: inline-block; width: 10px; height: 10px; background: oklch(0.70 0.16 230); margin-right: 8px; } .ds-screen { aspect-ratio: 16/9; display: grid; place-items: center; color: oklch(0.72 0.012 80); font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 0.08em; background: repeating-linear-gradient(45deg, oklch(0.27 0.016 60) 0 2px, transparent 2px 14px), oklch(0.16 0.012 60); }"
+    },
+    {
+      "name": "Crossfader",
+      "kind": "custom",
+      "refersTo": null,
+      "description": "Signature component. Fat range with a cyan-to-red blend track, tall paper thumb, Anton L/R ends.",
+      "html": "<div class=\"ds-fader-shell\"><span class=\"ds-end l\">L</span><input class=\"ds-fader\" type=\"range\" min=\"0\" max=\"1000\" value=\"500\" aria-label=\"Crossfader\" /><span class=\"ds-end r\">R</span></div>",
+      "css": ".ds-fader-shell { display: flex; align-items: center; gap: 18px; } .ds-end { font-family: 'Anton', sans-serif; font-size: 34px; text-transform: uppercase; width: 48px; } .ds-end.l { text-align: right; color: oklch(0.70 0.16 230); } .ds-end.r { color: oklch(0.69 0.21 30); } .ds-fader { flex: 1; appearance: none; width: 100%; height: 26px; background: transparent; cursor: grab; } .ds-fader:active { cursor: grabbing; } .ds-fader::-webkit-slider-runnable-track { height: 14px; border: 2px solid oklch(0.16 0.012 60); background: linear-gradient(90deg, oklch(0.70 0.16 230), oklch(0.69 0.21 30)); } .ds-fader::-webkit-slider-thumb { appearance: none; width: 26px; height: 46px; margin-top: -18px; background: oklch(0.93 0.015 80); border: 3px solid oklch(0.16 0.012 60); box-shadow: 0 0 0 2px oklch(0.93 0.015 80); } .ds-fader:focus-visible::-webkit-slider-thumb { box-shadow: 0 0 0 2px oklch(0.69 0.21 30); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Two-Color Bootleg",
+    "overview": "A punk show flyer that happens to mix audio: a riso-printed gig poster run off in two ink colors, dark room, one in the morning, both videos glowing on a laptop while someone drags a fat slider for the hell of it. Warm near-black canvas, grain over everything, blunt poster type, and exactly two screaming inks (cyan left, red right) that bleed together at the crossfader. The two colors are information, not decoration: you can read which side is winning from across the room. Depth is flat (2px borders, three tonal steps of ink), corners are hard, nothing apologizes.",
+    "keyCharacteristics": [
+      "Two named inks (cyan left, red right) carry deck identity, the fader track, and the gain readouts.",
+      "Warm near-black canvas, never pure black; off-white text, never pure white.",
+      "Riso grain over the whole surface; flat, hard-cornered, 2px-bordered chrome.",
+      "Blunt poster display type (Anton) over monospace utility labels (Space Mono).",
+      "The crossfader is the heaviest object on screen, by design."
+    ],
+    "rules": [
+      { "name": "The Two-Ink Rule", "body": "Exactly two chromatic colors: Left Cyan and Right Red, reserved for deck identity and the crossfader. Never a third hue; neutrals tinted only with canvas warmth (chroma <= 0.016).", "section": "colors" },
+      { "name": "The No-Pure-Black Rule", "body": "#000 and #fff are forbidden. Darkest is Ink, lightest is Paper. Pure values look like a bug.", "section": "colors" },
+      { "name": "The Shout-Once Rule", "body": "Anton appears at most twice: the wordmark and the fader L/R. Everything else is Space Mono or Archivo.", "section": "typography" },
+      { "name": "The Flat Print Rule", "body": "No box-shadow, no blur, no glass, ever. Lift via border color or tonal step, or fill with an ink.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do keep exactly two inks: Left Cyan oklch(0.70 0.16 230) and Right Red oklch(0.69 0.21 30). Cyan always left, red always right.",
+      "Do make the crossfader the single heaviest element on the page, with the most surrounding space.",
+      "Do carry deck identity redundantly: ink color AND L/R label AND fader position AND text gain readout. Color is never the only signal.",
+      "Do keep all corners hard (0px) and all depth flat (2px borders, tonal steps).",
+      "Do write chrome in Space Mono uppercase; reserve Anton for the wordmark and the fader L/R only.",
+      "Do keep neutrals warm-tinted near-black/off-white (chroma <= 0.016), never pure #000/#fff."
+    ],
+    "donts": [
+      "Don't build a generic SaaS dashboard: no card grids, no sidebar nav, no hero-metric tiles, no rounded-corner blandness.",
+      "Don't drift corporate / safe: nothing beige, focus-grouped, or sanded down.",
+      "Don't approach pro-DAW clutter: no wall of meters, knobs, or tiny labels.",
+      "Don't reach for the neon-synth-toy reflex: no glowing knobs, no glossy skeuomorphic dials, no RGB.",
+      "Don't use box-shadow, backdrop-filter, glassmorphism, gradient text, or side-stripe borders.",
+      "Don't introduce a third color or round a corner."
+    ]
+  }
+}

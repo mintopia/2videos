@@ -1,0 +1,23 @@
+{
+  "name": "two-videos-and-a-slider",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Two YouTube videos and a motherfucking slider. A two-color bootleg crossfader.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "node e2e/cue-enables-play.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.0",
+    "@types/youtube": "^0.1.0",
+    "jsdom": "^25.0.1",
+    "typescript": "^5.6.3",
+    "vite": "^6.0.3",
+    "vitest": "^2.1.8"
+  }
+}
